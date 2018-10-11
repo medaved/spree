@@ -58,7 +58,9 @@ module Spree
 
     def duplicate_image(image)
       new_image = image.dup
-      new_image.assign_attributes(attachment: image.attachment.clone)
+      key = image.attachment.blob.key
+      file = open(Rails.root.join('storage', key[0,2], key[2,2], key))
+      new_image.assign_attributes(attachment: {io: file, filename: image.attachment.filename})
       new_image
     end
 
